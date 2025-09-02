@@ -15,19 +15,24 @@ services:
       - key: DB_TYPE
         value: postgresdb
       - key: DB_POSTGRESDB_HOST
-        value: aws-1-eu-west-3.pooler.supabase.com
+        value: aws-1-eu-central-2.pooler.supabase.com
       - key: DB_POSTGRESDB_PORT
         value: "5432"
       - key: DB_POSTGRESDB_DATABASE
         value: postgres
       - key: DB_POSTGRESDB_USER
-        value: postgres.afsowloofqvlgedhjvuv
+        value: postgres.bnjwjnhejffssogfmses
       - key: DB_POSTGRESDB_PASSWORD
         value: '%NdkrU$c+bk8VpP'
 
       # (Opzionale) se vuoi tenere i dati di n8n in uno schema dedicato:
-      # - key: DB_POSTGRESDB_SCHEMA
-      #   value: n8n
+      - key: DB_POSTGRESDB_SCHEMA
+        value: n8n
+
+      - key: N8N_RUNNERS_ENABLED
+        value: "true"
+      - key: N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS
+        value: "true"
 
       # ---- Sicurezza & URL ----
       - key: N8N_ENCRYPTION_KEY
