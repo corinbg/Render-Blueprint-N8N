@@ -23,7 +23,7 @@ services:
       - key: DB_POSTGRESDB_USER
         value: postgres
       - key: DB_POSTGRESDB_PASSWORD
-        value: %NdkrU$c+bk8VpP
+        value: '%NdkrU$c+bk8VpP'
 
       # (Opzionale) se vuoi tenere i dati di n8n in uno schema dedicato:
       # - key: DB_POSTGRESDB_SCHEMA
