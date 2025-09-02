@@ -7,59 +7,44 @@
 # can upgrade to paid instance types at any time to
 # increase resources.
 
+# n8n on Render (Starter) + Supabase Postgres (external)
+# Save as: render.yaml
+
 services:
   - type: web
-    plan: standard
-    # This is the runtime for services that pull a prebuilt Docker image
+    name: n8n
+    plan: starter             # Web Service pagato "Starter" (sempre attivo)
     runtime: image
-    # You can give the service any name
-    name: n8n-service
     image:
-      # Pulls the n8n image tagged as latest from Docker Hub
+      # puoi fissare una versione stabile, es.: docker.io/n8nio/n8n:1.83.2
       url: docker.io/n8nio/n8n:latest
-
-    # All environment variables defined below are required!
-    #
-    # You can define additional environment variables as needed.
+    healthCheckPath: /healthz  # best practice per deploy affidabili
     envVars:
-      # Generates a base64-encoded key for
-      # encrypting credentials in n8n
-      #
-      # Do not modify this value after it's generated!
-      # If you do, you'll lose access to all credentials
-      # encrypted with the previous value.
-      - key: N8N_ENCRYPTION_KEY
-        generateValue: true
-
-      # These automatically populate connection details 
-      # for the Render Postgres database defined below
+      # --- DB: Postgres esterno (Supabase) ---
       - key: DB_TYPE
         value: postgresdb
-      - key: DB_POSTGRESDB_DATABASE
-        fromDatabase:
-          name: n8n-db
-          property: database
       - key: DB_POSTGRESDB_HOST
-        fromDatabase:
-          name: n8n-db
-          property: host
-      - key: DB_POSTGRESDB_PASSWORD
-        fromDatabase:
-          name: n8n-db
-          property: password
+        value: <YOUR_SUPABASE_HOST>          # es. db.xxxxx.supabase.co
+      - key: DB_POSTGRESDB_PORT
+        value: "5432"
+      - key: DB_POSTGRESDB_DATABASE
+        value: <YOUR_SUPABASE_DB>            # default "postgres" salvo modifica
       - key: DB_POSTGRESDB_USER
-        fromDatabase:
-          name: n8n-db
-          property: user
+        value: <YOUR_SUPABASE_USER>          # utente (non la service role key)
+      - key: DB_POSTGRESDB_PASSWORD
+        value: <YOUR_SUPABASE_PASSWORD>      # password utente DB
 
-databases:
-  - name: n8n-db
-    plan: basic-256mb
-    # The free instance type is limited to 1 GB of disk
-    # space.
-    #
-    # If you later upgrade to a paid instance type, you can
-    # increase the disk size to any multiple of 5 GB by
-    # setting the `diskSizeGB` property.
-    #
-    # diskSizeGB: 5
+      # --- Sicurezza & URL ---
+      - key: N8N_ENCRYPTION_KEY
+        generateValue: true   # Render genererà una chiave random sicura
+      - key: N8N_PROTOCOL
+        value: https
+      # Aggiorna dopo il primo deploy con l'URL reale del servizio:
+      - key: WEBHOOK_URL
+        value: https://<tuo-servizio>.onrender.com/
+
+      # --- (Opzionale) timezone per Schedule node & ambiente ---
+      # - key: GENERIC_TIMEZONE
+      #   value: Europe/Rome
+      # - key: TZ
+      #   value: Europe/Rome
