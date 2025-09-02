@@ -41,7 +41,7 @@ services:
         value: https
       # Imposta dopo il primo deploy con l'URL reale del servizio:
       - key: WEBHOOK_URL
-        value: https://<tuo-servizio>.onrender.com/
+        value: https://n8n-h3a7.onrender.com
 
       # (Opzionali utili)
       - key: GENERIC_TIMEZONE
