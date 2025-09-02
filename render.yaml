@@ -21,7 +21,7 @@ services:
       - key: DB_POSTGRESDB_DATABASE
         value: postgres
       - key: DB_POSTGRESDB_USER
-        value: postgres.pbytlchtreotzqgidoio
+        value: postgres.fxajmlgclzzyftlzilit
       - key: DB_POSTGRESDB_PASSWORD
         value: '%NdkrU$c+bk8VpP'
       - key: DB_POSTGRESDB_SSL
@@ -41,7 +41,7 @@ services:
         value: https://<tuo-servizio>.onrender.com/
 
       # (Opzionali utili)
-      # - key: GENERIC_TIMEZONE
-      #   value: Europe/Rome
-      # - key: TZ
-      #   value: Europe/Rome
+      - key: GENERIC_TIMEZONE
+        value: Europe/Rome
+      - key: TZ
+        value: Europe/Rome
