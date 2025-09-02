@@ -8,7 +8,7 @@ services:
     image:
       # Pin di versione consigliato per evitare sorprese agli upgrade:
       # (puoi usare "latest", ma meglio fissare un tag stabile)
-      url: docker.io/n8nio/n8n:1.83.2
+      url: docker.io/n8nio/n8n
     healthCheckPath: /healthz        # best practice: Render monitora e riavvia se serve
     envVars:
       # ---- DB: Supabase Postgres ----
