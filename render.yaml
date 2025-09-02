@@ -21,9 +21,11 @@ services:
       - key: DB_POSTGRESDB_DATABASE
         value: postgres
       - key: DB_POSTGRESDB_USER
-        value: postgres
+        value: postgres.pbytlchtreotzqgidoio
       - key: DB_POSTGRESDB_PASSWORD
         value: '%NdkrU$c+bk8VpP'
+      - key: DB_POSTGRESDB_SSL
+        value: "true"
 
       # (Opzionale) se vuoi tenere i dati di n8n in uno schema dedicato:
       # - key: DB_POSTGRESDB_SCHEMA
@@ -31,7 +33,7 @@ services:
 
       # ---- Sicurezza & URL ----
       - key: N8N_ENCRYPTION_KEY
-        value: <LA_TUA_CHIAVE_LUNGA_E_RANDOM>   # non cambiarla mai
+        value: 86145eb6aa37f13e89a89a4fe84404a58fa85258e9773ed77cddbc1eb02f6dcb   # non cambiarla mai
       - key: N8N_PROTOCOL
         value: https
       # Imposta dopo il primo deploy con l'URL reale del servizio:
