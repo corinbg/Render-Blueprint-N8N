@@ -1,49 +1,44 @@
-# Use this Blueprint to deploy n8n on Render as a web
-# service that uses a Postgres database to store
-# workflow data.
-#
-# This Blueprint uses free instance types (specified by
-# `plan`) for both the web service and the database. You
-# can upgrade to paid instance types at any time to
-# increase resources.
-
-# n8n on Render (Starter) + Supabase Postgres (external)
-# Save as: render.yaml
+# render.yaml — n8n on Render (Starter) + Supabase Postgres (external)
 
 services:
   - type: web
     name: n8n
-    plan: starter             # Web Service pagato "Starter" (sempre attivo)
+    plan: starter                    # web sempre ON; i webhook restano affidabili
     runtime: image
     image:
-      # puoi fissare una versione stabile, es.: docker.io/n8nio/n8n:1.83.2
-      url: docker.io/n8nio/n8n:latest
-    healthCheckPath: /healthz  # best practice per deploy affidabili
+      # Pin di versione consigliato per evitare sorprese agli upgrade:
+      # (puoi usare "latest", ma meglio fissare un tag stabile)
+      url: docker.io/n8nio/n8n:1.83.2
+    healthCheckPath: /healthz        # best practice: Render monitora e riavvia se serve
     envVars:
-      # --- DB: Postgres esterno (Supabase) ---
+      # ---- DB: Supabase Postgres ----
       - key: DB_TYPE
         value: postgresdb
       - key: DB_POSTGRESDB_HOST
-        value: <YOUR_SUPABASE_HOST>          # es. db.xxxxx.supabase.co
+        value: db.pbytlchtreotzqgidoio.supabase.co
       - key: DB_POSTGRESDB_PORT
         value: "5432"
       - key: DB_POSTGRESDB_DATABASE
-        value: <YOUR_SUPABASE_DB>            # default "postgres" salvo modifica
+        value: postgres
       - key: DB_POSTGRESDB_USER
-        value: <YOUR_SUPABASE_USER>          # utente (non la service role key)
+        value: postgres
       - key: DB_POSTGRESDB_PASSWORD
-        value: <YOUR_SUPABASE_PASSWORD>      # password utente DB
+        value: %NdkrU$c+bk8VpP
 
-      # --- Sicurezza & URL ---
+      # (Opzionale) se vuoi tenere i dati di n8n in uno schema dedicato:
+      # - key: DB_POSTGRESDB_SCHEMA
+      #   value: n8n
+
+      # ---- Sicurezza & URL ----
       - key: N8N_ENCRYPTION_KEY
-        generateValue: true   # Render genererà una chiave random sicura
+        value: <LA_TUA_CHIAVE_LUNGA_E_RANDOM>   # non cambiarla mai
       - key: N8N_PROTOCOL
         value: https
-      # Aggiorna dopo il primo deploy con l'URL reale del servizio:
+      # Imposta dopo il primo deploy con l'URL reale del servizio:
       - key: WEBHOOK_URL
         value: https://<tuo-servizio>.onrender.com/
 
-      # --- (Opzionale) timezone per Schedule node & ambiente ---
+      # (Opzionali utili)
       # - key: GENERIC_TIMEZONE
       #   value: Europe/Rome
       # - key: TZ
