@@ -4,12 +4,10 @@ services:
   - type: web
     name: n8n
     plan: starter                    # web sempre ON; i webhook restano affidabili
-    runtime: image
-    image:
-      # Pin di versione consigliato per evitare sorprese agli upgrade:
-      # (puoi usare "latest", ma meglio fissare un tag stabile)
-      url: docker.io/n8nio/n8n
-    healthCheckPath: /healthz        # best practice: Render monitora e riavvia se serve
+    runtime: docker
+    dockerfilePath: ./Dockerfile        # percorso del tuo Dockerfile (nella root del repo)
+    healthCheckPath: /healthz
+    autoDeploy: true                    # facoltativo: true = ogni push fa deploy automatico
     envVars:
       # ---- DB: Supabase Postgres ----
       - key: DB_TYPE
