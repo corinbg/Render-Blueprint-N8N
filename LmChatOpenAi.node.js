@@ -1,15 +1,24 @@
+/* patch per disabilitare N8nLlmTracing nel nodo LMChatOpenAi */
 const { ChatOpenAI } = require('langchain/chat_models/openai');
 
 module.exports = {
-  description: 'Modified LMChatOpenAi node with tracing disabled',
-  defaults: { name: 'LMChatOpenAi' },
-  type: 'node',
-  version: 1,
-  execute() {
-    const model = new ChatOpenAI({
-      temperature: 0.7,
-      callbacks: [], // <- qui abbiamo rimosso il tracing
-    });
-    return model;
+  description: 'LMChatOpenAi node patched to disable tracing',
+  default: {
+    name: 'LMChatOpenAi',
+    version: 1,
+  },
+  async execute(this: any, items: any[]) {
+    const returnData = [];
+    for (const item of items) {
+      const model = new ChatOpenAI({
+        temperature: this.getNodeParameter('temperature', 0),
+        // altri parametri come base model, max tokens...
+        callbacks: [], // Tracing disabilitato qui
+      });
+      // implementa la logica originale: invocazione model e recupero output...
+      const result = await model.call([{ role: 'user', content: this.getNodeParameter('prompt', item.json.text) }]);
+      returnData.push({ json: result });
+    }
+    return [this.helpers.returnJsonArray(returnData)];
   },
 };
